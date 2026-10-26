@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tic-Tac-Toe</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: #f0f8ff;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        #board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            gap: 5px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .cell {
+            width: 100px;
+            height: 100px;
+            font-size: 40px;
+            font-weight: bold;
+            border: 2px solid #333;
+            background: white;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .cell:hover {
+            background: #e6f7ff;
+        }
+
+        #status {
+            margin-top: 20px;
+            font-size: 24px;
+        }
+
+        button {
+            margin-top: 15px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🎮 Tic-Tac-Toe</h1>
+
+    <div id="board">
+        <div class="cell" onclick="makeMove(0)"></div>
+        <div class="cell" onclick="makeMove(1)"></div>
+        <div class="cell" onclick="makeMove(2)"></div>
+        <div class="cell" onclick="makeMove(3)"></div>
+        <div class="cell" onclick="makeMove(4)"></div>
+        <div class="cell" onclick="makeMove(5)"></div>
+        <div class="cell" onclick="makeMove(6)"></div>
+        <div class="cell" onclick="makeMove(7)"></div>
+        <div class="cell" onclick="makeMove(8)"></div>
+    </div>
+
+    <div id="status">Player X's Turn</div>
+    <button onclick="resetGame()">Restart Game</button>
+
+    <script>
+        let board = ["", "", "", "", "", "", "", "", ""];
+        let currentPlayer = "X";
+        let gameActive = true;
+
+        const winningCombinations = [
+            [0,1,2],
+            [3,4,5],
+            [6,7,8],
+            [0,3,6],
+            [1,4,7],
+            [2,5,8],
+            [0,4,8],
+            [2,4,6]
+        ];
+
+        function makeMove(index) {
+            if (board[index] !== "" || !gameActive) return;
+
+            board[index] = currentPlayer;
+            document.getElementsByClassName("cell")[index].textContent = currentPlayer;
+
+            if (checkWinner()) {
+                document.getElementById("status").textContent =
+                    `🎉 Player ${currentPlayer} Wins!`;
+                gameActive = false;
+                return;
+            }
+
+            if (!board.includes("")) {
+                document.getElementById("status").textContent = "🤝 It's a Draw!";
+                gameActive = false;
+                return;
+            }
+
+            currentPlayer = currentPlayer === "X" ? "O" : "X";
+            document.getElementById("status").textContent =
+                `Player ${currentPlayer}'s Turn`;
+        }
+
+        function checkWinner() {
+            return winningCombinations.some(combo => {
+                return combo.every(index => board[index] === currentPlayer);
+            });
+        }
+
+        function resetGame() {
+            board = ["", "", "", "", "", "", "", "", ""];
+            currentPlayer = "X";
+            gameActive = true;
+
+            document.querySelectorAll(".cell").forEach(cell => {
+                cell.textContent = "";
+            });
+
+            document.getElementById("status").textContent =
+                "Player X's Turn";
+        }
+    </script>
+
+</body>
+</html>
